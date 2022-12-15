@@ -1,6 +1,6 @@
 from enum import Enum
 
 
-class RECORD_TYPE(Enum):
+class RecordType(Enum):
     EXPENSE = 0
     INCOME = 1

@@ -1,12 +1,13 @@
-from database import Database, RECORD_TYPE
+from database import Database
+from entities.record_type import RecordType
 
 
 class TestDatabase:
     database = Database("./src/test_data/test_records.db")
 
     def test__new_index(self):
-        assert self.database._new_index(RECORD_TYPE.EXPENSE) == 763
-        assert self.database._new_index(RECORD_TYPE.INCOME) == 1
+        assert self.database._new_index(RecordType.EXPENSE) == 763
+        assert self.database._new_index(RecordType.INCOME) == 1
 
     def test_get_list_of_years(self):
         assert self.database.get_list_of_years() == [2018, 2019]

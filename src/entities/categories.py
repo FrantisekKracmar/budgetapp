@@ -1,4 +1,4 @@
-categories = [
+CATEGORIES = [
     "Living",
     "Travel",
     "Food",

@@ -1,7 +1,8 @@
-from entities.record_type import RECORD_TYPE
-from entities.categories import categories
-from entities.months import months
 import sqlite3
+
+from entities.categories import CATEGORIES
+from entities.months import MONTHS
+from entities.record_type import RecordType
 
 
 class Database:
@@ -36,7 +37,7 @@ class Database:
 
     def add_record(
         self,
-        record_type: RECORD_TYPE,
+        record_type: RecordType,
         category: int,
         year: int,
         month: int,
@@ -45,23 +46,25 @@ class Database:
         note: str,
     ):
         """Adds a new record to the database"""
-        if record_type == RECORD_TYPE.EXPENSE:
-            index_exp = self._new_index(RECORD_TYPE.EXPENSE)
+        if record_type == RecordType.EXPENSE:
+            index_exp = self._new_index(RecordType.EXPENSE)
             index_inc = 0
         else:
             index_exp = 0
-            index_inc = self._new_index(RECORD_TYPE.INCOME)
+            index_inc = self._new_index(RecordType.INCOME)
 
         cursor = self._db.cursor()
         query = (
             "INSERT INTO records"
-            " (typ, category, year, month, day, amount, note, indexExp, indexInc)"
-            f" VALUES({record_type.value},{category},{year},{month},{day},{amount},{note},{index_exp},{index_inc})"
+            " (typ, category, year, month, day,"
+            " amount, note, indexExp, indexInc)"
+            f" VALUES({record_type.value},{category},{year},{month},{day},"
+            f"{amount},{note},{index_exp},{index_inc})"
         )
         cursor.execute(query)
         self._db.commit()
 
-    def _new_index(self, record_type: RECORD_TYPE) -> int:
+    def _new_index(self, record_type: RecordType) -> int:
         """Gets following index number for respected type of record"""
         cursor = self._db.cursor()
         query = (
@@ -88,14 +91,14 @@ class Database:
         all_categories = []
         cursor = self._db.cursor()
 
-        for category in range(1, len(categories) + 1):  # TODO: values are 1-7
+        for category in range(1, len(CATEGORIES) + 1):  # TODO: values are 1-7
             singleCategory = []
 
-            for month in range(1, len(months) + 1):  # TODO: values are 1-12
+            for month in range(1, len(MONTHS) + 1):  # TODO: values are 1-12
                 query = (
                     "SELECT SUM(amount)"
                     " FROM records"
-                    " WHERE typ = " + str(RECORD_TYPE.EXPENSE.value) + " AND"
+                    " WHERE typ = " + str(RecordType.EXPENSE.value) + " AND"
                     " year = " + str(year) + " AND"
                     " month = " + str(month) + " AND"
                     " category = " + str(category)
@@ -115,11 +118,11 @@ class Database:
         all_months = []
         cursor = self._db.cursor()
 
-        for month in range(1, len(months) + 1):  # TODO: values are 1-12
+        for month in range(1, len(MONTHS) + 1):  # TODO: values are 1-12
             query = (
                 "SELECT SUM(amount)"
                 " FROM records"
-                " WHERE typ = " + str(RECORD_TYPE.INCOME.value) + " AND"
+                " WHERE typ = " + str(RecordType.INCOME.value) + " AND"
                 " year = " + str(year) + " AND"
                 " month = " + str(month)
             )
