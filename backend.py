@@ -7,26 +7,29 @@ from matplotlib import style
 
 style.use("seaborn-bright")
 
-"""
-Co to vlastne umi:
-    1)Vlozit zaznam z prikazove radky
-    2)Sumy nad vsemi zaznamy
-    3)Seznam roku pro uzivatelsky vyber
-    4)Vytvoreni seznamu kategorii
-    5)Uzivatelske rozhrani - shell
-    6)Grafy pro zvoleny rok z nabidky
-"""
 
-"""database="records.db"
+def docu():
+    """
+    Co to vlastne umi:
+        1)Vlozit zaznam z prikazove radky
+        2)Sumy nad vsemi zaznamy
+        3)Seznam roku pro uzivatelsky vyber
+        4)Vytvoreni seznamu kategorii
+        5)Uzivatelske rozhrani - shell
+        6)Grafy pro zvoleny rok z nabidky
+    """
 
-#tohle by mohlo fungovat
-def connectDB(dbName):
-    db = sqlite3.connect(dbName)
-    cursor = db.cursor()
-#tohle taky
-def disconnectDB(dbName):
-    db.commit()
-    db.close()"""
+    """database="records.db"
+
+    #tohle by mohlo fungovat
+    def connectDB(dbName):
+        db = sqlite3.connect(dbName)
+        cursor = db.cursor()
+    #tohle taky
+    def disconnectDB(dbName):
+        db.commit()
+        db.close()"""
+    pass
 
 
 def createDB():
@@ -300,6 +303,6 @@ categories = [
     "Misc",
 ]
 
-
-"##### MAIN PROGRAM #####"
-# userInterface()
+if __name__ == "__main__":
+    "Shell interface"
+    userInterface()
