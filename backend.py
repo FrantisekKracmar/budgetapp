@@ -1,6 +1,7 @@
-import sqlite3
-import os.path
 import datetime as dt
+import os.path
+import sqlite3
+
 import matplotlib.pyplot as plt
 from matplotlib import style
 
@@ -30,14 +31,14 @@ def disconnectDB(dbName):
 
 def createDB():
     """IF database does not exist, makes a new one"""
-    if os.path.exists("records.db") == False:
+    if os.path.exists("records.db") is False:
         # connect to database
         db = sqlite3.connect("records.db")
         cursor = db.cursor()
 
         # createa new db
         cursor.execute(
-            "create table records (id INTEGER PRIMARY KEY, typ TEXT, category TEXT, year INTEGER, month INTEGER, day INTEGER, amount INTEGER, note TEXT, indexExp INTEGER, indexInc INTEGER)"
+            "create table records (id INTEGER PRIMARY KEY, typ TEXT, category TEXT, year INTEGER, month INTEGER, day INTEGER, amount INTEGER, note TEXT, indexExp INTEGER, indexInc INTEGER)"  # noqa: E501
         )
 
         # execute and close
@@ -64,7 +65,7 @@ def addRecord(expinc, category, year, month, day, amount, note):
 
     # add a record to the db
     cursor.execute(
-        """INSERT INTO records(typ, category, year, month, day, amount, note, indexExp, indexInc) VALUES(?,?,?,?,?,?,?,?,?)""",
+        """INSERT INTO records(typ, category, year, month, day, amount, note, indexExp, indexInc) VALUES(?,?,?,?,?,?,?,?,?)""",  # noqa: E501
         (expinc, category, year, month, day, amount, note, indexExp, indexInc),
     )
     db.commit()
@@ -88,7 +89,7 @@ def newIndex(expinc):
     maxIndexRecord = cursor.fetchone()
 
     # handle if maximum index is None
-    if maxIndexRecord[0] == None:
+    if maxIndexRecord[0] is None:
         newIndex = 1
     else:
         newIndex = maxIndexRecord[0] + 1
@@ -115,13 +116,13 @@ def updateExpSums(year):
             len(months)
         ):  # for all months within single category
             dbQuery = (
-                "SELECT SUM(amount) FROM records WHERE typ==0 and year==%s and month==%s and category==%s"
+                "SELECT SUM(amount) FROM records WHERE typ==0 and year==%s and month==%s and category==%s"  # noqa: E501
                 % (year, month + 1, category)
             )  # proč month+1??
             cursor.execute(dbQuery)
             soucet = cursor.fetchone()
 
-            if soucet[0] == None:
+            if soucet[0] is None:
                 soucet = 0
 
             else:
@@ -145,13 +146,13 @@ def updateIncSums(year):
 
     for month in range(len(months)):  # for all months
         dbQuery = (
-            "SELECT SUM(amount) FROM records WHERE typ==1 and year=%s and month=%s"
+            "SELECT SUM(amount) FROM records WHERE typ==1 and year=%s and month=%s"  # noqa: E501
             % (year, month + 1)
         )  # bylo month +1
         cursor.execute(dbQuery)
         soucet = cursor.fetchone()
 
-        if soucet[0] == None:
+        if soucet[0] is None:
             soucet = 0
 
         else:
@@ -164,7 +165,7 @@ def updateIncSums(year):
     return allMonths
 
 
-### Monthly sums of categories during given year
+# Monthly sums of categories during given year
 def graph_data(year, categories):
     colors = ["b", "g", "r", "c", "m", "y", "k"]
 
@@ -224,7 +225,7 @@ def listOfYears():
     return years
 
 
-### Main menu in shell
+# Main menu in shell
 def userInterface():
     """First main menu in shell"""
     global categories
@@ -265,7 +266,7 @@ def userInterface():
         print("Please input number from 1 to 3")
 
 
-### Shell user interface for new record
+# Shell user interface for new record
 def userNewRecord():
     print("--------------------------")
     print("You are adding a new record")
