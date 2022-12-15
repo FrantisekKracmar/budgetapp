@@ -1,6 +1,6 @@
-import sqlite3
 import os.path
 import random
+import sqlite3
 
 if os.path.exists("records.db") is False:
     db = sqlite3.connect("records.db")

@@ -1,6 +1,7 @@
-import sqlite3
-import os.path
 import datetime as dt
+import os.path
+import sqlite3
+
 import matplotlib.pyplot as plt
 from matplotlib import style
 

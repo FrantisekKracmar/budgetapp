@@ -1,5 +1,6 @@
-import matplotlib.pyplot as plt
 import datetime as dt
+
+import matplotlib.pyplot as plt
 
 """dates = []
 for year in range(2012, 2014):

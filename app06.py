@@ -1,7 +1,8 @@
-import backend as backend
-from datetime import datetime
 import tkinter as tk
 import tkinter.messagebox
+from datetime import datetime
+
+import backend as backend
 
 window = tk.Tk()
 window.title("My awesome budget app")
