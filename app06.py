@@ -35,7 +35,7 @@ months = [
     "December",
 ]
 
-# ----FUNCTIONS-----
+
 def expenses_sums():
     # Define actual month
     month = datetime.now().month - 1
@@ -137,7 +137,7 @@ def add_record():
 
         print("ready to add")
         print(
-            f"expinc: {expinc}  category: {category}  year: {year}  month: {month}  date: {date}  amount: {amount} note: {note}"
+            f"expinc: {expinc}  category: {category}  year: {year}  month: {month}  date: {date}  amount: {amount} note: {note}"  # noqa: E501
         )
 
         tk.messagebox.showinfo(
@@ -189,7 +189,7 @@ tk.Label(text=f"Incomes total:        {incomes_total} Kč").grid(
     column=0, row=row_col1
 )
 
-##### SHOW GRAPH ###
+# SHOW GRAPH
 
 # ----ENTRIES----
 years = backend.listOfYears()
@@ -205,7 +205,7 @@ button2 = tk.Button(text="Show graph for year: ", command=graphs).grid(
     column=1, row=3
 )
 
-##### NEW RECORD FORM ###
+# NEW RECORD FORM
 
 # -----LABELS------
 # Header

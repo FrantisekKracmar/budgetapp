@@ -1,15 +1,16 @@
 """from tkinter import *
 from tkinter import ttk
- 
+
 root = ttk.Tk()
- 
+
 label = ttk.Label(root, text="Hello world!")
- 
+
 label.pack()
- 
+
 root.mainloop()"""
 
 import tkinter as tk
+
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -23,12 +24,14 @@ class Application(tk.Frame):
         self.hi_there["command"] = self.say_hi
         self.hi_there.pack(side="top")
 
-        self.quit = tk.Button(self, text="QUIT", fg="red",
-                              command=root.destroy)
+        self.quit = tk.Button(
+            self, text="QUIT", fg="red", command=root.destroy
+        )
         self.quit.pack(side="bottom")
 
     def say_hi(self):
         print("hi there, everyone!")
+
 
 root = tk.Tk()
 app = Application(master=root)
