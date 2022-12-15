@@ -7,17 +7,38 @@ window = tk.Tk()
 window.title("My awesome budget app")
 
 # magic for icon
-img = tk.PhotoImage(file='wallet.png')
-window.tk.call('wm', 'iconphoto', window._w, img)
+img = tk.PhotoImage(file="wallet.png")
+window.tk.call("wm", "iconphoto", window._w, img)
 
 # Define lists
-categories = ["Living", "Travel", "Food", "Shopping", "Services", "Household", "Misc"]
-months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+categories = [
+    "Living",
+    "Travel",
+    "Food",
+    "Shopping",
+    "Services",
+    "Household",
+    "Misc",
+]
+months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+]
 
-#----FUNCTIONS-----
+# ----FUNCTIONS-----
 def expenses_sums():
     # Define actual month
-    month = datetime.now().month -1
+    month = datetime.now().month - 1
 
     all_categories = []
 
@@ -33,35 +54,38 @@ def expenses_sums():
         # Make final list of sums
         all_categories.append(single_category_single_month)
 
-    return(all_categories)
+    return all_categories
+
 
 def incomes_sum():
     # Define actual month
-    actual_month = datetime.now().month -1
+    actual_month = datetime.now().month - 1
 
     # Get list of monthly sums
     all_months = backend.updateIncSums(2018)
     # Get actual month sum
     actual_month_sum = all_months[actual_month]
 
-    return(actual_month_sum)
+    return actual_month_sum
+
 
 def graphs():
     year = str(entry_year_graph.get())
 
-    if year != '':
+    if year != "":
         backend.graph_data(int(year), categories)
 
     else:
         pass
 
+
 def add_record():
     error = 0
-    
+
     # Get type of record entry (Expense/Income)
     if entry_expinc.get() == "Expense":
         expinc = 0
-    
+
     elif entry_expinc.get() == "Income":
         expinc = 1
 
@@ -72,7 +96,7 @@ def add_record():
     if entry_category.get() == "" and expinc == 0:
         tk.messagebox.showerror("Error", "Please, choose a category!")
         error += 1
-    
+
     elif expinc == 1:
         category = 0
         error += 0
@@ -80,7 +104,7 @@ def add_record():
     else:
         category = categories.index(entry_category.get()) + 1
         error += 0
-    
+
     # Handle enpty year entry
     if entry_year.get() == "":
         tk.messagebox.showerror("Error", "Please, insert a year!")
@@ -112,14 +136,18 @@ def add_record():
         # backend.addRecord(expinc, category, year, month, date, amount, note)
 
         print("ready to add")
-        print(f"expinc: {expinc}  category: {category}  year: {year}  month: {month}  date: {date}  amount: {amount} note: {note}")
+        print(
+            f"expinc: {expinc}  category: {category}  year: {year}  month: {month}  date: {date}  amount: {amount} note: {note}"
+        )
 
-        tk.messagebox.showinfo("Add a new record", "New record has been successfully added.")
+        tk.messagebox.showinfo(
+            "Add a new record", "New record has been successfully added."
+        )
     else:
         pass
 
 
-#----LABELS------
+# ----LABELS------
 row_col1 = 0
 tk.Label(text="Welcome to my App").grid(column=0, row=row_col1)
 
@@ -138,7 +166,9 @@ for i in range(len(categories)):
     spacers = " " * (30 - (len_name + len_sum))
 
     row_col1 += 1
-    label_category = tk.Label(text=f"{category_name}:{spacers}{category_sum} Kč")
+    label_category = tk.Label(
+        text=f"{category_name}:{spacers}{category_sum} Kč"
+    )
     label_category.grid(column=0, row=row_col1)
 
 # Blank line and sums for expenses and incomes
@@ -148,31 +178,41 @@ tk.Label(text=" ").grid(column=0, row=row_col1)
 expenses_total = sum(expenses_sums)
 
 row_col1 += 1
-tk.Label(text=f"Expenses total:        {expenses_total} Kč").grid(column=0, row=row_col1)
+tk.Label(text=f"Expenses total:        {expenses_total} Kč").grid(
+    column=0, row=row_col1
+)
 
 incomes_total = incomes_sum()
 
 row_col1 += 1
-tk.Label(text=f"Incomes total:        {incomes_total} Kč").grid(column=0, row=row_col1)
+tk.Label(text=f"Incomes total:        {incomes_total} Kč").grid(
+    column=0, row=row_col1
+)
 
 ##### SHOW GRAPH ###
 
-#----ENTRIES----
+# ----ENTRIES----
 years = backend.listOfYears()
 entry_year_graph = tk.StringVar(window)
 
-entr_year_graph = tk.OptionMenu(window, entry_year_graph, *years).grid(column=3, row=3)
+entr_year_graph = tk.OptionMenu(window, entry_year_graph, *years).grid(
+    column=3, row=3
+)
 
-#----BUTTONS----
+# ----BUTTONS----
 # Show graph for given year
-button2 = tk.Button(text="Show graph for year: ", command=graphs).grid(column=1, row=3)
+button2 = tk.Button(text="Show graph for year: ", command=graphs).grid(
+    column=1, row=3
+)
 
 ##### NEW RECORD FORM ###
 
-#-----LABELS------
+# -----LABELS------
 # Header
 row_col4 = 0
-tk.Label(window, text="### New record form ###").grid(column=4, row=row_col4, columnspan=2)
+tk.Label(window, text="### New record form ###").grid(
+    column=4, row=row_col4, columnspan=2
+)
 
 # Type of record
 row_col4 += 1
@@ -202,7 +242,7 @@ tk.Label(text="Amount: (*)").grid(column=4, row=row_col4)
 row_col4 += 1
 tk.Label(text="Note: ").grid(column=4, row=row_col4)
 
-#-----ENTRIES------
+# -----ENTRIES------
 # Type of record
 row_col5 = 1
 entry_expinc = tk.StringVar(window)
@@ -214,7 +254,7 @@ entr_expinc.grid(column=5, row=row_col5)
 # Category
 row_col5 += 1
 entry_category = tk.StringVar(window)
- 
+
 entr_category = tk.OptionMenu(window, entry_category, *categories)
 entr_category.grid(column=5, row=row_col5)
 
@@ -229,7 +269,7 @@ entry_year.grid(column=5, row=row_col5)
 row_col5 += 1
 
 entry_month = tk.StringVar(window)
-currentMonth = months[datetime.now().month - 1] #datetime.now().month
+currentMonth = months[datetime.now().month - 1]  # datetime.now().month
 entry_month.set(currentMonth)
 
 entr_month = tk.OptionMenu(window, entry_month, *months)
@@ -251,10 +291,12 @@ row_col5 += 1
 entry_note = tk.Entry()
 entry_note.grid(column=5, row=row_col5)
 
-#----BUTTONS-----
+# ----BUTTONS-----
 # Add a new record
 row_col5 += 1
-button1 = tk.Button(text="Add a new record", command=add_record).grid(column=5, row=row_col5)
+button1 = tk.Button(text="Add a new record", command=add_record).grid(
+    column=5, row=row_col5
+)
 
 
 window.mainloop()
