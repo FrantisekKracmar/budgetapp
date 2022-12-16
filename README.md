@@ -14,4 +14,4 @@ I focus on following things with this version:
   <li>Clean code</li>
   <li>Test driven development</li>
   <li>Automate my workflow with state-of-the-art tools: GitHub Actions, flake8, black</li>
-</ul> 
+</ul>
