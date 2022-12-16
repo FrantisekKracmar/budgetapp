@@ -105,7 +105,7 @@ class Database:
         cursor = self._db.cursor()
 
         for category in range(1, len(CATEGORIES) + 1):  # TODO: values are 1-7
-            singleCategory = []
+            single_category = []
 
             for month in range(1, len(MONTHS) + 1):  # TODO: values are 1-12
                 query = (
@@ -120,9 +120,9 @@ class Database:
                 sum = cursor.fetchone()
                 sum = sum[0] if sum[0] is not None else 0
 
-                singleCategory.append(sum)
+                single_category.append(sum)
 
-            all_categories.append(singleCategory)
+            all_categories.append(single_category)
 
         return all_categories
 
