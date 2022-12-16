@@ -47,12 +47,16 @@ class Backend:
             available_years = self._db.get_list_of_years()
             for year in range(len(available_years)):
                 print(available_years[year])
-            chosen_year = int(input("Which year do you want to see the sums for?: "))
+            chosen_year = int(
+                input("Which year do you want to see the sums for?: ")
+            )
 
             if chosen_year in available_years:
                 self._graph_data(chosen_year)
             else:
-                print(f"Sorry, there are no available data for year {chosen_year}")
+                print(
+                    f"Sorry, there are no available data for year {chosen_year}"  # noqa: E501
+                )
 
         elif user_input == 3:
             print("Sorry, you this feature is not implemented yet :(")
@@ -107,6 +111,7 @@ class Backend:
         )
 
         plt.show(block=True)
+
 
 if __name__ == "__main__":
     "Show shell interface"
