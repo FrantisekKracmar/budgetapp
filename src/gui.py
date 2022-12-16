@@ -6,6 +6,7 @@ from backend import Backend
 from database import Database
 from entities.categories import CATEGORIES
 from entities.months import MONTHS
+from entities.record_type import RecordType
 
 
 class Gui:
@@ -23,71 +24,52 @@ class Gui:
         self._render()
 
     def _add_record(self):
-        error = 0  # Todo: rework to Exception
-        expinc = 0
-        # Get type of record entry (Expense/Income)
-        if self._entry_expinc.get() == "Expense":
-            expinc = 0
+        error = 0
+        try:
+            record_type = RecordType.EXPENSE if self._entry_expinc.get() == "Expense" else RecordType.INCOME
 
-        elif self._entry_expinc.get() == "Income":
-            expinc = 1
+            if record_type == RecordType.INCOME:
+                category = 0
 
-        else:
-            pass
+            elif record_type == RecordType.EXPENSE and self._entry_category.get() == "":
+                raise Exception("Please, choose a category!")
 
-        # Handle empty category entry for expense and income record
-        if self._entry_category.get() == "" and expinc == 0:
-            messagebox.showerror("Error", "Please, choose a category!")
-            error += 1
+            else:
+                category = CATEGORIES.index(self._entry_category.get()) + 1
 
-        elif expinc == 1:
-            category = 0
-            error += 0
+            if self._entry_year.get() == "":
+                raise Exception("Please, insert a year!")
 
-        else:
-            category = CATEGORIES.index(self._entry_category.get()) + 1
-            error += 0
+            else:
+                year = self._entry_year.get()
 
-        # Handle empty year entry
-        if self._entry_year.get() == "":
-            messagebox.showerror("Error", "Please, insert a year!")
-            error += 1
+            month = (
+                MONTHS.index(self._entry_month.get()) + 1
+            )  # TODO: magic constant, use list
 
-        else:
-            year = self._entry_year.get()
-            error += 0
+            date = self._entry_date.get()
 
-        # Get month entry
-        month = (
-            MONTHS.index(self._entry_month.get()) + 1
-        )  # TODO: magic constant, use list
-        # Get date entry
-        date = self._entry_date.get()
+            if self._entry_amount.get() == "":
+                raise Exception("Please, insert an amount!")
 
-        # Handle empty amount entry
-        if self._entry_amount.get() == "":
-            messagebox.showerror("Error", "Please, insert an amount!")
-            error += 1
+            else:
+                amount = self._entry_amount.get()
 
-        else:
-            amount = self._entry_amount.get()
-            error += 0
+            note = self._entry_note.get()
 
-        # Get note entry
-        note = self._entry_note.get()
+            if error == 0:
+                # backend.addRecord(expinc, category, year, month, date, amount, note)  # noqa: E501
+                print(
+                    f"expinc: {record_type}  category: {category}  year: {year}  month: {month}  date: {date}  amount: {amount} note: {note}"  # noqa: E501
+                )
 
-        # Add a new record when all required entries filled
-        if error == 0:
-            # backend.addRecord(expinc, category, year, month, date, amount, note)  # noqa: E501
-            print(
-                f"expinc: {expinc}  category: {category}  year: {year}  month: {month}  date: {date}  amount: {amount} note: {note}"  # noqa: E501
-            )
+                messagebox.showinfo(
+                    "Add a new record", "New record has been successfully added."
+                )
+            
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
 
-            messagebox.showinfo(
-                "Add a new record", "New record has been successfully added."
-            )
-        else:
-            pass
 
     def _render(self):
         # ----LABELS------
@@ -261,7 +243,7 @@ class Gui:
 
         all_categories = []
         source_list = self._db.get_sums_expenses(datetime.now().year)
-        for category in range(7):  # TODO: use categories list
+        for category in range(len(CATEGORIES)):
             single_category = source_list[category]
             single_category_single_month = single_category[current_month]
             all_categories.append(single_category_single_month)
