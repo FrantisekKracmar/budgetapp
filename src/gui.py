@@ -25,12 +25,19 @@ class Gui:
 
     def _add_record(self):
         try:
-            record_type = RecordType.EXPENSE if self._entry_record_type.get() == "Expense" else RecordType.INCOME
+            record_type = (
+                RecordType.EXPENSE
+                if self._entry_record_type.get() == "Expense"
+                else RecordType.INCOME
+            )
 
             if record_type == RecordType.INCOME:
                 category = 1
 
-            elif record_type == RecordType.EXPENSE and self._entry_category.get() == "":
+            elif (
+                record_type == RecordType.EXPENSE
+                and self._entry_category.get() == ""
+            ):
                 raise Exception("Please, choose a category!")
 
             else:
@@ -56,14 +63,15 @@ class Gui:
 
             note = self._entry_note.get()
 
-            self._db.add_record(record_type, category, year, month, date, amount, note)  # noqa: E501
+            self._db.add_record(
+                record_type, category, year, month, date, amount, note
+            )  # noqa: E501
             messagebox.showinfo(
                 "Add a new record", "New record has been successfully added."
             )
-            
+
         except Exception as e:
             messagebox.showerror("Error", str(e))
-
 
     def _render(self):
         # ----LABELS------
@@ -158,9 +166,9 @@ class Gui:
 
         row_col5 += 1
         self._entry_category = tk.StringVar(self._window)
-        tk.OptionMenu(
-            self._window, self._entry_category, *CATEGORIES
-        ).grid(column=5, row=row_col5)
+        tk.OptionMenu(self._window, self._entry_category, *CATEGORIES).grid(
+            column=5, row=row_col5
+        )
 
         row_col5 += 1
         self._entry_year = tk.Entry()
@@ -171,7 +179,9 @@ class Gui:
         self._entry_month = tk.StringVar(self._window)
         currentMonth = MONTHS[datetime.now().month - 1]
         self._entry_month.set(currentMonth)
-        tk.OptionMenu(self._window, self._entry_month, *MONTHS).grid(column=5, row=row_col5)
+        tk.OptionMenu(self._window, self._entry_month, *MONTHS).grid(
+            column=5, row=row_col5
+        )
 
         row_col5 += 1
         self._entry_date = tk.Entry()
