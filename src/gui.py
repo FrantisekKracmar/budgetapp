@@ -26,7 +26,7 @@ class Gui:
     def _add_record(self):
         error = 0
         try:
-            record_type = RecordType.EXPENSE if self._entry_expinc.get() == "Expense" else RecordType.INCOME
+            record_type = RecordType.EXPENSE if self._entry_record_type.get() == "Expense" else RecordType.INCOME
 
             if record_type == RecordType.INCOME:
                 category = 0
@@ -114,117 +114,84 @@ class Gui:
         )
 
         # SHOW GRAPH
-
-        # ----ENTRIES----
         years = self._db.get_list_of_years()
         self._entry_year_graph = tk.StringVar(self._window)
-
         tk.OptionMenu(self._window, self._entry_year_graph, *years).grid(
             column=3, row=3
         )
-
-        # ----BUTTONS----
-        # Show graph for given year
         tk.Button(
             text="Show graph for year: ", command=self._plot_graphs
         ).grid(column=1, row=3)
 
         # NEW RECORD FORM
-
-        # -----LABELS------
-        # Header
         row_col4 = 0
         tk.Label(self._window, text="### New record form ###").grid(
             column=4, row=row_col4, columnspan=2
         )
 
-        # Type of record
         row_col4 += 1
         tk.Label(self._window, text="Type of record: (*)").grid(
             column=4, row=row_col4
         )
 
-        # Category
         row_col4 += 1
         tk.Label(self._window, text="Category: (*)").grid(
             column=4, row=row_col4
         )
 
-        # Year
         row_col4 += 1
         tk.Label(text="Year: (*)").grid(column=4, row=row_col4)
 
-        # Month
         row_col4 += 1
         tk.Label(text="Month (number): (*)").grid(column=4, row=row_col4)
 
-        # Day
         row_col4 += 1
         tk.Label(text="Day: ").grid(column=4, row=row_col4)
 
-        # Amount
         row_col4 += 1
         tk.Label(text="Amount: (*)").grid(column=4, row=row_col4)
 
-        # Note
         row_col4 += 1
         tk.Label(text="Note: ").grid(column=4, row=row_col4)
 
         # -----ENTRIES------
-        # Type of record
         row_col5 = 1
-        self._entry_expinc = tk.StringVar(self._window)
-        self._entry_expinc.set("Expense")
+        self._entry_record_type = tk.StringVar(self._window)
+        self._entry_record_type.set("Expense")
+        tk.OptionMenu(
+            self._window, self._entry_record_type, "Expense", "Income"
+        ).grid(column=5, row=row_col5)
 
-        entr_expinc = tk.OptionMenu(
-            self._window, self._entry_expinc, "Expense", "Income"
-        )
-        entr_expinc.grid(column=5, row=row_col5)
-
-        # Category
         row_col5 += 1
         self._entry_category = tk.StringVar(self._window)
-
-        entr_category = tk.OptionMenu(
+        tk.OptionMenu(
             self._window, self._entry_category, *CATEGORIES
-        )
-        entr_category.grid(column=5, row=row_col5)
+        ).grid(column=5, row=row_col5)
 
-        # Year
         row_col5 += 1
-
         self._entry_year = tk.Entry()
         self._entry_year.insert(tk.END, str(datetime.now().year))
         self._entry_year.grid(column=5, row=row_col5)
 
-        # Month
         row_col5 += 1
-
         self._entry_month = tk.StringVar(self._window)
-        currentMonth = MONTHS[datetime.now().month - 1]  # datetime.now().month
+        currentMonth = MONTHS[datetime.now().month - 1]
         self._entry_month.set(currentMonth)
+        tk.OptionMenu(self._window, self._entry_month, *MONTHS).grid(column=5, row=row_col5)
 
-        entr_month = tk.OptionMenu(self._window, self._entry_month, *MONTHS)
-        entr_month.grid(column=5, row=row_col5)
-
-        # Date
         row_col5 += 1
         self._entry_date = tk.Entry()
         self._entry_date.insert(tk.END, str(datetime.now().day))
         self._entry_date.grid(column=5, row=row_col5)
 
-        # Amount
         row_col5 += 1
         self._entry_amount = tk.Entry()
         self._entry_amount.grid(column=5, row=row_col5)
 
-        # Note
         row_col5 += 1
         self._entry_note = tk.Entry()
         self._entry_note.grid(column=5, row=row_col5)
 
-        # ----BUTTONS-----
-        # Add a new record
         row_col5 += 1
         tk.Button(text="Add a new record", command=self._add_record).grid(
             column=5, row=row_col5
