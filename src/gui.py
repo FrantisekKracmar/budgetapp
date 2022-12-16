@@ -29,7 +29,7 @@ class Gui:
             record_type = RecordType.EXPENSE if self._entry_record_type.get() == "Expense" else RecordType.INCOME
 
             if record_type == RecordType.INCOME:
-                category = 0
+                category = 1
 
             elif record_type == RecordType.EXPENSE and self._entry_category.get() == "":
                 raise Exception("Please, choose a category!")
@@ -41,28 +41,24 @@ class Gui:
                 raise Exception("Please, insert a year!")
 
             else:
-                year = self._entry_year.get()
+                year = int(self._entry_year.get())
 
             month = (
                 MONTHS.index(self._entry_month.get()) + 1
             )  # TODO: magic constant, use list
 
-            date = self._entry_date.get()
+            date = int(self._entry_date.get())
 
             if self._entry_amount.get() == "":
                 raise Exception("Please, insert an amount!")
 
             else:
-                amount = self._entry_amount.get()
+                amount = int(self._entry_amount.get())
 
             note = self._entry_note.get()
 
             if error == 0:
-                # backend.addRecord(expinc, category, year, month, date, amount, note)  # noqa: E501
-                print(
-                    f"expinc: {record_type}  category: {category}  year: {year}  month: {month}  date: {date}  amount: {amount} note: {note}"  # noqa: E501
-                )
-
+                self._db.add_record(record_type, category, year, month, date, amount, note)  # noqa: E501
                 messagebox.showinfo(
                     "Add a new record", "New record has been successfully added."
                 )
