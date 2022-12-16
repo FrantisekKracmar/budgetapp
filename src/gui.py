@@ -25,6 +25,7 @@ class Gui:
 
     def _add_record(self):
         try:
+            self._validate_inputs()
             record_type = (
                 RecordType.EXPENSE
                 if self._entry_record_type.get() == "Expense"
@@ -32,22 +33,12 @@ class Gui:
             )
 
             if record_type == RecordType.INCOME:
-                category = 1
-
-            elif (
-                record_type == RecordType.EXPENSE
-                and self._entry_category.get() == ""
-            ):
-                raise Exception("Please, choose a category!")
+                category = 0
 
             else:
                 category = CATEGORIES.index(self._entry_category.get()) + 1
 
-            if self._entry_year.get() == "":
-                raise Exception("Please, insert a year!")
-
-            else:
-                year = int(self._entry_year.get())
+            year = int(self._entry_year.get())
 
             month = (
                 MONTHS.index(self._entry_month.get()) + 1
@@ -55,23 +46,30 @@ class Gui:
 
             date = int(self._entry_date.get())
 
-            if self._entry_amount.get() == "":
-                raise Exception("Please, insert an amount!")
-
-            else:
-                amount = int(self._entry_amount.get())
+            amount = int(self._entry_amount.get())
 
             note = self._entry_note.get()
 
             self._db.add_record(
                 record_type, category, year, month, date, amount, note
-            )  # noqa: E501
+            )
             messagebox.showinfo(
                 "Add a new record", "New record has been successfully added."
             )
 
         except Exception as e:
             messagebox.showerror("Error", str(e))
+    
+    def _validate_inputs(self):
+        if self._entry_record_type.get() == "Expense" and self._entry_category.get() == "":
+            raise Exception("Please, choose a category!")
+        
+        if self._entry_year.get() == "":
+            raise Exception("Please, insert a year!")
+        
+        if self._entry_amount.get() == "":
+            raise Exception("Please, insert an amount!")
+
 
     def _render(self):
         # ----LABELS------
