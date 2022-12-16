@@ -54,21 +54,22 @@ class Database:
             index_inc = self._new_index(RecordType.INCOME)
 
         cursor = self._db.cursor()
+        values = (record_type.value, category, year, month, day, amount, note, index_exp, index_inc)
         query = (
             "INSERT INTO records"
             " (typ, category, year, month, day,"
             " amount, note, indexExp, indexInc)"
-            f" VALUES({record_type.value},{category},{year},{month},{day},"
-            f"{amount},{note},{index_exp},{index_inc})"
+            " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)"
         )
-        cursor.execute(query)
+        cursor.execute(query, values)
         self._db.commit()
 
     def _new_index(self, record_type: RecordType) -> int:
         """Gets following index number for respected type of record"""
         cursor = self._db.cursor()
+        column = "indexExp" if record_type == RecordType.EXPENSE else "indexInc"
         query = (
-            f"SELECT MAX(indexExp) FROM records WHERE typ=={record_type.value}"
+            f"SELECT MAX({column}) FROM records WHERE typ=={record_type.value}"
         )
         cursor.execute(query)
         last_index = cursor.fetchone()
