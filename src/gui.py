@@ -24,7 +24,6 @@ class Gui:
         self._render()
 
     def _add_record(self):
-        error = 0
         try:
             record_type = RecordType.EXPENSE if self._entry_record_type.get() == "Expense" else RecordType.INCOME
 
@@ -57,11 +56,10 @@ class Gui:
 
             note = self._entry_note.get()
 
-            if error == 0:
-                self._db.add_record(record_type, category, year, month, date, amount, note)  # noqa: E501
-                messagebox.showinfo(
-                    "Add a new record", "New record has been successfully added."
-                )
+            self._db.add_record(record_type, category, year, month, date, amount, note)  # noqa: E501
+            messagebox.showinfo(
+                "Add a new record", "New record has been successfully added."
+            )
             
         except Exception as e:
             messagebox.showerror("Error", str(e))
