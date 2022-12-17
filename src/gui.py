@@ -39,7 +39,7 @@ class LoginPage(tk.Frame):
         if hashed_pwd == self.EXPECTED_PWD:
             self._controller.show_frame(MainPage)
         else:
-            messagebox.showerror("Error", "Username or password in invalid")
+            messagebox.showerror("Error", "Username or password is invalid")
 
 
 class MainPage(tk.Frame):
