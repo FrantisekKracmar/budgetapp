@@ -5,7 +5,7 @@ from backend import Backend
 from database import Database
 from entities.categories import CATEGORIES
 from windows.history import History
-from windows.record_form import RecordForm
+from windows.add_record import AddRecord
 
 
 class MainPage(tk.Frame):
@@ -108,7 +108,7 @@ class MainPage(tk.Frame):
         newWindow = tk.Toplevel(self.master)
         img = tk.PhotoImage(file="wallet.png")
         self._controller.call("wm", "iconphoto", newWindow._w, img)
-        RecordForm(newWindow)
+        AddRecord(newWindow)
 
     def _show_history(self):
         newWindow = tk.Toplevel(self.master)
