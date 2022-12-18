@@ -155,6 +155,17 @@ class Database:
             all_months.append(sum)
 
         return all_months
+    
+    def get_user_password(self, username: str) -> str:
+        cursor = self._db.cursor()
+        query = (
+                "SELECT password"
+                " FROM users"
+                " WHERE name = '" + str(username) + "'"
+            )
+        cursor.execute(query)
+        password = cursor.fetchone()[0]
+        return password
 
 
 if __name__ == "__main__":
