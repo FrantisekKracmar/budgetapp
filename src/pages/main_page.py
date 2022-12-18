@@ -5,6 +5,7 @@ from backend import Backend
 from database import Database
 from entities.categories import CATEGORIES
 from windows.add_record import AddRecord
+from windows.edit_record import EditRecord
 from windows.history import History
 
 
@@ -114,4 +115,10 @@ class MainPage(tk.Frame):
         newWindow = tk.Toplevel(self.master)
         img = tk.PhotoImage(file="wallet.png")
         self._controller.call("wm", "iconphoto", newWindow._w, img)
-        History(newWindow)
+        History(newWindow, self)
+    
+    def _show_edit_form(self, record_id: int):
+        newWindow = tk.Toplevel(self.master)
+        img = tk.PhotoImage(file="wallet.png")
+        self._controller.call("wm", "iconphoto", newWindow._w, img)
+        EditRecord(newWindow, record_id)

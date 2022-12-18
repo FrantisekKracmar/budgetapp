@@ -3,13 +3,13 @@ from tkinter import ttk
 
 from database import Database
 from entities.record_type import RecordType
-from windows.edit_record import EditRecord
 
 
 class History:
-    def __init__(self, master):
+    def __init__(self, master, main_window):
         self._master = master
         self._master.title("History")
+        self._main_window = main_window
 
         self._db = Database()
 
@@ -106,13 +106,8 @@ class History:
 
     def _edit_expense_record(self, row: int):
         record_id = int(self._expenses_tab.grid_slaves(row, 0)[0].cget("text"))
-        self._show_edit_form(record_id)
+        self._main_window._show_edit_form(record_id)
 
     def _edit_icome_record(self, row: int):
         record_id = int(self._incomes_tab.grid_slaves(row, 0)[0].cget("text"))
-        self._show_edit_form(record_id)
-
-    def _show_edit_form(self, record_id: int):
-        newWindow = tk.Toplevel(self._master)
-        # TODO: set icon
-        EditRecord(newWindow, record_id)
+        self._main_window._show_edit_form(record_id)
