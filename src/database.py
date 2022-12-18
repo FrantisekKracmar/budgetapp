@@ -166,6 +166,18 @@ class Database:
         cursor.execute(query)
         password = cursor.fetchone()[0]
         return password
+    
+    def get_record(self, record_id: int) -> list:
+        cursor = self._db.cursor()
+        query = (
+            "SELECT *"
+            " FROM records"
+            " WHERE id = " + str(record_id)
+        )
+        cursor.execute(query)
+        record = cursor.fetchone()
+
+        return record
 
     def get_last_records(self, quantity: int, record_type: RecordType):
         cursor = self._db.cursor()

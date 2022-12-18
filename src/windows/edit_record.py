@@ -1,6 +1,5 @@
 import tkinter as tk
-import tkinter.messagebox as messagebox
-from datetime import datetime
+from tkinter import ttk
 
 from database import Database
 from entities.categories import CATEGORIES
@@ -8,10 +7,11 @@ from entities.months import MONTHS
 from entities.record_type import RecordType
 
 
-class RecordForm:
-    def __init__(self, master):
+class EditRecord:
+    def __init__(self, master, id: int):
         self._master = master
-        self._master.title("New record form")
+        self._master.title("Edit record")
+        self._id = id
 
         self._db = Database()
 
@@ -23,6 +23,10 @@ class RecordForm:
         self._render_content()
 
     def _render_content(self):
+        record = self._db.get_record(self._id)
+
+        record_type_value = "Expenses" if int(record[1]) == 0 else "Income"
+
         tk.Label(self._frame, text="Type of record: (*)").grid(column=0, row=0)
         tk.Label(self._frame, text="Category: (*)").grid(column=0, row=1)
         tk.Label(self._frame, text="Year: (*)").grid(column=0, row=2)
@@ -33,41 +37,44 @@ class RecordForm:
 
         # -----ENTRIES------
         self._entry_record_type = tk.StringVar()
-        self._entry_record_type.set("Expense")
+        self._entry_record_type.set(record_type_value)
         tk.OptionMenu(
             self._frame, self._entry_record_type, "Expense", "Income"
         ).grid(column=1, row=0)
         self._entry_category = tk.StringVar()
+        self._entry_category.set(CATEGORIES[int(record[2])])
         tk.OptionMenu(self._frame, self._entry_category, *CATEGORIES).grid(
             column=1, row=1
         )
 
         self._entry_year = tk.Entry(self._frame)
-        self._entry_year.insert(tk.END, str(datetime.now().year))
+        self._entry_year.insert(tk.END, record[3])
         self._entry_year.grid(column=1, row=2)
 
         self._entry_month = tk.StringVar()
-        currentMonth = MONTHS[datetime.now().month - 1]
+        currentMonth = MONTHS[record[4] - 1]
         self._entry_month.set(currentMonth)
         tk.OptionMenu(self._frame, self._entry_month, *MONTHS).grid(
             column=1, row=3
         )
 
         self._entry_date = tk.Entry(self._frame)
-        self._entry_date.insert(tk.END, str(datetime.now().day))
+        self._entry_date.insert(tk.END, record[5])
         self._entry_date.grid(column=1, row=4)
 
         self._entry_amount = tk.Entry(self._frame)
+        self._entry_amount.insert(tk.END, record[6])
         self._entry_amount.grid(column=1, row=5)
 
         self._entry_note = tk.Entry(self._frame)
+        self._entry_note.insert(tk.END, record[7])
         self._entry_note.grid(column=1, row=6)
 
         tk.Button(
             self._frame,
-            text="Add a new record",
+            text="Save record",
             bg="green",
-            command=self._add_record,
+            command=self._save_record,
         ).grid(column=1, row=7)
 
         self.quitButton = tk.Button(
@@ -77,52 +84,9 @@ class RecordForm:
             bg="red",
             command=self.close_window,
         ).grid(column=0, row=8)
-
-    def _add_record(self):
-        try:
-            self._validate_inputs()
-
-            record_type = (
-                RecordType.EXPENSE
-                if self._entry_record_type.get() == "Expense"
-                else RecordType.INCOME
-            )
-            category = (
-                CATEGORIES.index(self._entry_category.get()) + 1
-                if record_type == RecordType.EXPENSE
-                else 0
-            )
-            year = int(self._entry_year.get())
-            month = (
-                MONTHS.index(self._entry_month.get()) + 1
-            )  # TODO: magic constant, use list
-            date = int(self._entry_date.get())
-            amount = int(self._entry_amount.get())
-            note = self._entry_note.get()
-
-            self._db.add_record(
-                record_type, category, year, month, date, amount, note
-            )
-
-            messagebox.showinfo(
-                "Add a new record", "New record has been successfully added."
-            )
-
-        except Exception as e:
-            messagebox.showerror("Error", str(e))
-
-    def _validate_inputs(self):
-        if (
-            self._entry_record_type.get() == "Expense"
-            and self._entry_category.get() == ""
-        ):
-            raise Exception("Please, choose a category!")
-
-        if self._entry_year.get() == "":
-            raise Exception("Please, insert a year!")
-
-        if self._entry_amount.get() == "":
-            raise Exception("Please, insert an amount!")
+    
+    def _save_record(self):
+        pass
 
     def close_window(self):
         self._master.destroy()
