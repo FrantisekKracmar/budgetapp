@@ -167,6 +167,20 @@ class Database:
         password = cursor.fetchone()[0]
         return password
 
+    def get_last_records(self, quantity: int, record_type: RecordType):
+        cursor = self._db.cursor()
+        query = (
+            "SELECT *"
+            " FROM records"
+            " WHERE typ = " + str(record_type.value) + ""
+            " ORDER BY id DESC"
+            " LIMIT " + str(quantity)
+        )
+        cursor.execute(query)
+        last_records = cursor.fetchall()
+
+        return last_records
+
 
 if __name__ == "__main__":
     pass
