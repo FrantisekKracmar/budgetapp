@@ -25,7 +25,7 @@ class LoginPage(tk.Frame):
         self._entry_name.grid(row=0, column=1, padx=10, pady=10)
         label_pwd = tk.Label(self, text="Password")
         label_pwd.grid(row=1, column=0, padx=10, pady=10)
-        self._entry_password = tk.Entry(self)
+        self._entry_password = tk.Entry(self, show="*")
         self._entry_password.grid(row=1, column=1, padx=10, pady=10)
         button1 = tk.Button(
             self, text="Sign in", width=25, command=self.__verify_login
