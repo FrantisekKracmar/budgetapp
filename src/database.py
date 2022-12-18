@@ -29,6 +29,15 @@ class Database:
             " indexInc INTEGER)"
         )
         cursor.execute(query)
+        query = (
+            "create table"
+            " if not exists"
+            " users ("
+            " id INTEGER PRIMARY KEY,"
+            " name TEXT,"
+            " password TEXT)"
+        )
+        cursor.execute(query)
         self._db.commit()
 
     def __del__(self):
