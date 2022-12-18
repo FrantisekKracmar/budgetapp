@@ -4,8 +4,8 @@ from datetime import datetime
 from backend import Backend
 from database import Database
 from entities.categories import CATEGORIES
-from windows.history import History
 from windows.add_record import AddRecord
+from windows.history import History
 
 
 class MainPage(tk.Frame):
@@ -86,13 +86,13 @@ class MainPage(tk.Frame):
             self._backend._graph_data(int(year))
 
     def _expenses_sums(self):
-        current_month = datetime.now().month - 1
+        current_month_index = datetime.now().month - 1
 
         all_categories = []
         source_list = self._db.get_sums_expenses(datetime.now().year)
         for category in range(len(CATEGORIES)):
             single_category = source_list[category]
-            single_category_single_month = single_category[current_month]
+            single_category_single_month = single_category[current_month_index]
             all_categories.append(single_category_single_month)
 
         return all_categories

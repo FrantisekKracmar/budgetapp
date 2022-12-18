@@ -166,18 +166,43 @@ class Database:
         cursor.execute(query)
         password = cursor.fetchone()[0]
         return password
-    
+
     def get_record(self, record_id: int) -> list:
         cursor = self._db.cursor()
-        query = (
-            "SELECT *"
-            " FROM records"
-            " WHERE id = " + str(record_id)
-        )
+        query = "SELECT * FROM records WHERE id = " + str(record_id)
         cursor.execute(query)
         record = cursor.fetchone()
 
         return record
+
+    def update_record(
+        self,
+        id: int,
+        record_type: RecordType,
+        category: int,
+        year: int,
+        month: int,
+        day: int,
+        amount: int,
+        note: str,
+    ):
+        cursor = self._db.cursor()
+        query = (
+            "UPDATE records"
+            " SET typ = ?,"
+            " category = ?,"
+            " year = ?,"
+            " month = ?,"
+            " day = ?,"
+            " amount = ?,"
+            " note = ?"
+            " WHERE id = ?"
+        )
+        cursor.execute(
+            query,
+            (record_type.value, category, year, month, day, amount, note, id),
+        )
+        self._db.commit()
 
     def get_last_records(self, quantity: int, record_type: RecordType):
         cursor = self._db.cursor()

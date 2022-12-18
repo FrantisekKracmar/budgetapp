@@ -91,7 +91,7 @@ class AddRecord:
                 CATEGORIES.index(self._entry_category.get()) + 1
                 if record_type == RecordType.EXPENSE
                 else 0
-            )
+            )  # TODO: magic constant, use list
             year = int(self._entry_year.get())
             month = (
                 MONTHS.index(self._entry_month.get()) + 1

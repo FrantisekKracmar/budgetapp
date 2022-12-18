@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+import tkinter.messagebox as messagebox
 
 from database import Database
 from entities.categories import CATEGORIES
@@ -25,7 +25,7 @@ class EditRecord:
     def _render_content(self):
         record = self._db.get_record(self._id)
 
-        record_type_value = "Expenses" if int(record[1]) == 0 else "Income"
+        record_type_value = "Expense" if int(record[1]) == 0 else "Income"
 
         tk.Label(self._frame, text="Type of record: (*)").grid(column=0, row=0)
         tk.Label(self._frame, text="Category: (*)").grid(column=0, row=1)
@@ -42,7 +42,9 @@ class EditRecord:
             self._frame, self._entry_record_type, "Expense", "Income"
         ).grid(column=1, row=0)
         self._entry_category = tk.StringVar()
-        self._entry_category.set(CATEGORIES[int(record[2])])
+        self._entry_category.set(
+            CATEGORIES[int(record[2]) - 1]
+        )  # TODO: magic constant, use list
         tk.OptionMenu(self._frame, self._entry_category, *CATEGORIES).grid(
             column=1, row=1
         )
@@ -84,9 +86,60 @@ class EditRecord:
             bg="red",
             command=self.close_window,
         ).grid(column=0, row=8)
-    
+
     def _save_record(self):
-        pass
+        try:
+            self._validate_inputs()
+
+            record_type = (
+                RecordType.EXPENSE
+                if self._entry_record_type.get() == "Expense"
+                else RecordType.INCOME
+            )
+            category = (
+                CATEGORIES.index(self._entry_category.get()) + 1
+                if record_type == RecordType.EXPENSE
+                else 0
+            )  # TODO: magic constant, use list
+            year = int(self._entry_year.get())
+            month = (
+                MONTHS.index(self._entry_month.get()) + 1
+            )  # TODO: magic constant, use list
+            date = int(self._entry_date.get())
+            amount = int(self._entry_amount.get())
+            note = self._entry_note.get()
+
+            self._db.update_record(
+                self._id,
+                record_type,
+                category,
+                year,
+                month,
+                date,
+                amount,
+                note,
+            )
+
+            messagebox.showinfo(
+                "Add a new record", "Record was successfully updated."
+            )
+            self.close_window()
+
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    def _validate_inputs(self):
+        if (
+            self._entry_record_type.get() == "Expense"
+            and self._entry_category.get() == ""
+        ):
+            raise Exception("Please, choose a category!")
+
+        if self._entry_year.get() == "":
+            raise Exception("Please, insert a year!")
+
+        if self._entry_amount.get() == "":
+            raise Exception("Please, insert an amount!")
 
     def close_window(self):
         self._master.destroy()

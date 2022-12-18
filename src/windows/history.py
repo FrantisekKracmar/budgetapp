@@ -5,6 +5,7 @@ from database import Database
 from entities.record_type import RecordType
 from windows.edit_record import EditRecord
 
+
 class History:
     def __init__(self, master):
         self._master = master
@@ -25,9 +26,9 @@ class History:
         self._expenses_tab = ttk.Frame(tabControl)
         self._incomes_tab = ttk.Frame(tabControl)
 
-        tabControl.add(self._expenses_tab, text ='Expenses')
-        tabControl.add(self._incomes_tab, text ='Incomes')
-        tabControl.pack(expand = 1, fill ="both")
+        tabControl.add(self._expenses_tab, text="Expenses")
+        tabControl.add(self._incomes_tab, text="Incomes")
+        tabControl.pack(expand=1, fill="both")
 
         last_expenses = self._db.get_last_records(10, RecordType.EXPENSE)
 
@@ -41,17 +42,33 @@ class History:
 
         for i, record in enumerate(last_expenses):
             row_i = 1 + i
-            tk.Label(self._expenses_tab, text=f"{record[0]}").grid(column=0, row=row_i)
-            tk.Label(self._expenses_tab, text=f"{record[2]}").grid(column=2, row=row_i)
-            tk.Label(self._expenses_tab, text=f"{record[3]}").grid(column=3, row=row_i)
-            tk.Label(self._expenses_tab, text=f"{record[4]}").grid(column=4, row=row_i)
-            tk.Label(self._expenses_tab, text=f"{record[5]}").grid(column=5, row=row_i)
-            tk.Label(self._expenses_tab, text=f"{record[6]}").grid(column=6, row=row_i)
-            tk.Label(self._expenses_tab, text=f"{record[7]}").grid(column=7, row=row_i)
+            tk.Label(self._expenses_tab, text=f"{record[0]}").grid(
+                column=0, row=row_i
+            )
+            tk.Label(self._expenses_tab, text=f"{record[2]}").grid(
+                column=2, row=row_i
+            )
+            tk.Label(self._expenses_tab, text=f"{record[3]}").grid(
+                column=3, row=row_i
+            )
+            tk.Label(self._expenses_tab, text=f"{record[4]}").grid(
+                column=4, row=row_i
+            )
+            tk.Label(self._expenses_tab, text=f"{record[5]}").grid(
+                column=5, row=row_i
+            )
+            tk.Label(self._expenses_tab, text=f"{record[6]}").grid(
+                column=6, row=row_i
+            )
+            tk.Label(self._expenses_tab, text=f"{record[7]}").grid(
+                column=7, row=row_i
+            )
             tk.Button(
-            self._expenses_tab, text="Edit record", command=lambda row=row_i: self._edit_expense_record(row)
-        ).grid(column=8, row=row_i)
-        
+                self._expenses_tab,
+                text="Edit record",
+                command=lambda row=row_i: self._edit_expense_record(row),
+            ).grid(column=8, row=row_i)
+
         last_incomes = self._db.get_last_records(10, RecordType.INCOME)
 
         tk.Label(self._incomes_tab, text="ID").grid(column=0, row=0)
@@ -63,24 +80,38 @@ class History:
 
         for i, record in enumerate(last_incomes):
             row_i = 1 + i
-            tk.Label(self._incomes_tab, text=f"{record[0]}").grid(column=0, row=row_i)
-            tk.Label(self._incomes_tab, text=f"{record[3]}").grid(column=1, row=row_i)
-            tk.Label(self._incomes_tab, text=f"{record[4]}").grid(column=2, row=row_i)
-            tk.Label(self._incomes_tab, text=f"{record[5]}").grid(column=3, row=row_i)
-            tk.Label(self._incomes_tab, text=f"{record[6]}").grid(column=4, row=row_i)
-            tk.Label(self._incomes_tab, text=f"{record[7]}").grid(column=5, row=row_i)
+            tk.Label(self._incomes_tab, text=f"{record[0]}").grid(
+                column=0, row=row_i
+            )
+            tk.Label(self._incomes_tab, text=f"{record[3]}").grid(
+                column=1, row=row_i
+            )
+            tk.Label(self._incomes_tab, text=f"{record[4]}").grid(
+                column=2, row=row_i
+            )
+            tk.Label(self._incomes_tab, text=f"{record[5]}").grid(
+                column=3, row=row_i
+            )
+            tk.Label(self._incomes_tab, text=f"{record[6]}").grid(
+                column=4, row=row_i
+            )
+            tk.Label(self._incomes_tab, text=f"{record[7]}").grid(
+                column=5, row=row_i
+            )
             tk.Button(
-            self._incomes_tab, text="Edit record", command=lambda row=row_i: self._edit_icome_record(row)
-        ).grid(column=6, row=row_i)
-    
+                self._incomes_tab,
+                text="Edit record",
+                command=lambda row=row_i: self._edit_icome_record(row),
+            ).grid(column=6, row=row_i)
+
     def _edit_expense_record(self, row: int):
         record_id = int(self._expenses_tab.grid_slaves(row, 0)[0].cget("text"))
         self._show_edit_form(record_id)
-    
+
     def _edit_icome_record(self, row: int):
         record_id = int(self._incomes_tab.grid_slaves(row, 0)[0].cget("text"))
         self._show_edit_form(record_id)
-    
+
     def _show_edit_form(self, record_id: int):
         newWindow = tk.Toplevel(self._master)
         # TODO: set icon
