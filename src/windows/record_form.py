@@ -1,13 +1,12 @@
 import tkinter as tk
 import tkinter.messagebox as messagebox
-
-from database import Database
-
 from datetime import datetime
 
+from database import Database
 from entities.categories import CATEGORIES
 from entities.months import MONTHS
 from entities.record_type import RecordType
+
 
 class RecordForm:
     def __init__(self, master):

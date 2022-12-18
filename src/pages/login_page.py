@@ -1,11 +1,10 @@
 import tkinter as tk
 import tkinter.messagebox as messagebox
-
-from database import Database
-
 from hashlib import sha256
 
+from database import Database
 from pages.main_page import MainPage
+
 
 class LoginPage(tk.Frame):
     def __init__(self, parent, controller):
