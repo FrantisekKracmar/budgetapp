@@ -106,19 +106,19 @@ class MainPage(tk.Frame):
         return current_month_sum
 
     def _show_record_form(self):
-        newWindow = tk.Toplevel(self.master)
-        img = tk.PhotoImage(file=self._controller.icon)
-        self._controller.call("wm", "iconphoto", newWindow._w, img)
-        AddRecord(newWindow)
+        window = self._create_new_window()
+        AddRecord(window)
 
     def _show_history(self):
-        newWindow = tk.Toplevel(self.master)
-        img = tk.PhotoImage(file=self._controller.icon)
-        self._controller.call("wm", "iconphoto", newWindow._w, img)
-        History(newWindow, self)
+        window = self._create_new_window()
+        History(window, self)
 
     def _show_edit_form(self, record_id: int):
-        newWindow = tk.Toplevel(self.master)
+        window = self._create_new_window()
+        EditRecord(window, record_id)
+    
+    def _create_new_window(self):
+        new_window = tk.Toplevel(self.master)
         img = tk.PhotoImage(file=self._controller.icon)
-        self._controller.call("wm", "iconphoto", newWindow._w, img)
-        EditRecord(newWindow, record_id)
+        self._controller.call("wm", "iconphoto", new_window._w, img)
+        return new_window
