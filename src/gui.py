@@ -11,13 +11,10 @@ from entities.record_type import RecordType
 
 
 class LoginPage(tk.Frame):
-    EXPECTED_PWD = (
-        "56b1db8133d9eb398aabd376f07bf8ab5fc584ea0b8bd6a1770200cb613ca005"
-    )
-
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self._controller = controller
+        self._db = Database()
 
         label_name = tk.Label(self, text="Username")
         label_name.grid(row=0, column=0, padx=10, pady=10)
@@ -33,10 +30,11 @@ class LoginPage(tk.Frame):
         button1.grid(row=2, column=1, padx=10, pady=10)
 
     def __verify_login(self):
-        hashed_pwd = sha256(
+        entry_pwd = sha256(
             f"{self._entry_password.get()}".encode("ascii")
         ).hexdigest()
-        if hashed_pwd == self.EXPECTED_PWD:
+        expected_pwd = self._db.get_user_password(self._entry_name.get())
+        if entry_pwd == expected_pwd:
             self._controller.show_frame(MainPage)
         else:
             messagebox.showerror("Error", "Username or password is invalid")
