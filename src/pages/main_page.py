@@ -4,6 +4,7 @@ from datetime import datetime
 from backend import Backend
 from database import Database
 from entities.categories import CATEGORIES
+from windows.history import History
 from windows.record_form import RecordForm
 
 
@@ -64,6 +65,9 @@ class MainPage(tk.Frame):
         tk.Button(
             self, text="Add new record", command=self._show_record_form
         ).grid(column=1, row=0)
+        tk.Button(self, text="Show history", command=self._show_history).grid(
+            column=1, row=1
+        )
 
         # SHOW GRAPH
         years = self._db.get_list_of_years()
@@ -105,3 +109,9 @@ class MainPage(tk.Frame):
         img = tk.PhotoImage(file="wallet.png")
         self._controller.call("wm", "iconphoto", newWindow._w, img)
         RecordForm(newWindow)
+
+    def _show_history(self):
+        newWindow = tk.Toplevel(self.master)
+        img = tk.PhotoImage(file="wallet.png")
+        self._controller.call("wm", "iconphoto", newWindow._w, img)
+        History(newWindow)
