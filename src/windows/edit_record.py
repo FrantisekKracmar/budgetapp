@@ -42,9 +42,10 @@ class EditRecord:
             self._frame, self._entry_record_type, "Expense", "Income"
         ).grid(column=1, row=0)
         self._entry_category = tk.StringVar()
-        self._entry_category.set(
-            CATEGORIES[int(record[2]) - 1]
-        )  # TODO: magic constant, use list
+        if record_type_value == "Expense":
+            self._entry_category.set(
+                CATEGORIES[int(record[2]) - 1]
+            )  # TODO: magic constant, use list
         tk.OptionMenu(self._frame, self._entry_category, *CATEGORIES).grid(
             column=1, row=1
         )
@@ -54,7 +55,7 @@ class EditRecord:
         self._entry_year.grid(column=1, row=2)
 
         self._entry_month = tk.StringVar()
-        currentMonth = MONTHS[record[4] - 1]
+        currentMonth = MONTHS[record[4] - 1]  # TODO: magic constant
         self._entry_month.set(currentMonth)
         tk.OptionMenu(self._frame, self._entry_month, *MONTHS).grid(
             column=1, row=3
