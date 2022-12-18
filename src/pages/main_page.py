@@ -20,7 +20,6 @@ class MainPage(tk.Frame):
         self._render_content()
 
     def _render_content(self):
-        # ----LABELS------
         row_col1 = 0
         tk.Label(self, text="Welcome to my App").grid(column=0, row=row_col1)
 
@@ -46,7 +45,6 @@ class MainPage(tk.Frame):
             )
             label_category.grid(column=0, row=row_col1)
 
-        # Blank line and sums for expenses and incomes
         row_col1 += 1
         tk.Label(self, text=" ").grid(column=0, row=row_col1)
 
@@ -70,7 +68,6 @@ class MainPage(tk.Frame):
             column=1, row=1
         )
 
-        # SHOW GRAPH
         years = self._db.get_list_of_years()
         self._entry_year_graph = tk.StringVar(self)
         tk.OptionMenu(self, self._entry_year_graph, *years).grid(
