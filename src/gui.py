@@ -43,10 +43,14 @@ class LoginPage(tk.Frame):
 class MainPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self._controller = controller
 
         self._db = Database()
         self._backend = Backend()
 
+        self._render_content()
+    
+    def _render_content(self):
         # ----LABELS------
         row_col1 = 0
         tk.Label(self, text="Welcome to my App").grid(column=0, row=row_col1)
@@ -90,6 +94,10 @@ class MainPage(tk.Frame):
             column=0, row=row_col1
         )
 
+        tk.Button(
+            self, text="Add new record", command=self._show_record_form
+        ).grid(column=1, row=0)
+
         # SHOW GRAPH
         years = self._db.get_list_of_years()
         self._entry_year_graph = tk.StringVar(self)
@@ -99,79 +107,7 @@ class MainPage(tk.Frame):
         tk.Button(
             self, text="Show graph for year: ", command=self._plot_graphs
         ).grid(column=1, row=3)
-
-        # NEW RECORD FORM
-        row_col4 = 0
-        tk.Label(self, text="### New record form ###").grid(
-            column=4, row=row_col4, columnspan=2
-        )
-
-        row_col4 += 1
-        tk.Label(self, text="Type of record: (*)").grid(column=4, row=row_col4)
-
-        row_col4 += 1
-        tk.Label(self, text="Category: (*)").grid(column=4, row=row_col4)
-
-        row_col4 += 1
-        tk.Label(self, text="Year: (*)").grid(column=4, row=row_col4)
-
-        row_col4 += 1
-        tk.Label(self, text="Month (number): (*)").grid(column=4, row=row_col4)
-
-        row_col4 += 1
-        tk.Label(self, text="Day: ").grid(column=4, row=row_col4)
-
-        row_col4 += 1
-        tk.Label(self, text="Amount: (*)").grid(column=4, row=row_col4)
-
-        row_col4 += 1
-        tk.Label(self, text="Note: ").grid(column=4, row=row_col4)
-
-        # -----ENTRIES------
-        row_col5 = 1
-        self._entry_record_type = tk.StringVar(self)
-        self._entry_record_type.set("Expense")
-        tk.OptionMenu(self, self._entry_record_type, "Expense", "Income").grid(
-            column=5, row=row_col5
-        )
-
-        row_col5 += 1
-        self._entry_category = tk.StringVar(self)
-        tk.OptionMenu(self, self._entry_category, *CATEGORIES).grid(
-            column=5, row=row_col5
-        )
-
-        row_col5 += 1
-        self._entry_year = tk.Entry(self)
-        self._entry_year.insert(tk.END, str(datetime.now().year))
-        self._entry_year.grid(column=5, row=row_col5)
-
-        row_col5 += 1
-        self._entry_month = tk.StringVar(self)
-        currentMonth = MONTHS[datetime.now().month - 1]
-        self._entry_month.set(currentMonth)
-        tk.OptionMenu(self, self._entry_month, *MONTHS).grid(
-            column=5, row=row_col5
-        )
-
-        row_col5 += 1
-        self._entry_date = tk.Entry(self)
-        self._entry_date.insert(tk.END, str(datetime.now().day))
-        self._entry_date.grid(column=5, row=row_col5)
-
-        row_col5 += 1
-        self._entry_amount = tk.Entry(self)
-        self._entry_amount.grid(column=5, row=row_col5)
-
-        row_col5 += 1
-        self._entry_note = tk.Entry(self)
-        self._entry_note.grid(column=5, row=row_col5)
-
-        row_col5 += 1
-        tk.Button(
-            self, text="Add a new record", command=self._add_record
-        ).grid(column=5, row=row_col5)
-
+    
     def _plot_graphs(self):
         year = str(self._entry_year_graph.get())
 
@@ -196,7 +132,76 @@ class MainPage(tk.Frame):
         current_month_sum = all_months[current_month]
 
         return current_month_sum
+    
+    def _show_record_form(self):
+        newWindow = tk.Toplevel(self.master)
+        img = tk.PhotoImage(file="wallet.png")
+        self._controller.call("wm", "iconphoto", newWindow._w, img)
+        RecordForm(newWindow)
+    
+class RecordForm():
+    def __init__(self, master):
+        self._master = master
+        self._master.title("New record form")
 
+        self._db = Database()
+
+        self._frame = tk.Frame(self._master)
+        self._frame.pack(side="top", fill="both", expand=True)
+        self._frame.grid_rowconfigure(0, weight=1)
+        self._frame.grid_columnconfigure(0, weight=1)
+
+        self._render_content()
+    
+    def _render_content(self):
+        tk.Label(self._frame, text="Type of record: (*)").grid(column=0, row=0)
+        tk.Label(self._frame, text="Category: (*)").grid(column=0, row=1)
+        tk.Label(self._frame, text="Year: (*)").grid(column=0, row=2)
+        tk.Label(self._frame, text="Month (number): (*)").grid(column=0, row=3)
+        tk.Label(self._frame, text="Day: ").grid(column=0, row=4)
+        tk.Label(self._frame, text="Amount: (*)").grid(column=0, row=5)
+        tk.Label(self._frame, text="Note: ").grid(column=0, row=6)
+
+        # -----ENTRIES------
+        self._entry_record_type = tk.StringVar()
+        self._entry_record_type.set("Expense")
+        tk.OptionMenu(self._frame, self._entry_record_type, "Expense", "Income").grid(
+            column=1, row=0
+        )
+        self._entry_category = tk.StringVar()
+        tk.OptionMenu(self._frame, self._entry_category, *CATEGORIES).grid(
+            column=1, row=1
+        )
+
+        self._entry_year = tk.Entry(self._frame)
+        self._entry_year.insert(tk.END, str(datetime.now().year))
+        self._entry_year.grid(column=1, row=2)
+
+        self._entry_month = tk.StringVar()
+        currentMonth = MONTHS[datetime.now().month - 1]
+        self._entry_month.set(currentMonth)
+        tk.OptionMenu(self._frame, self._entry_month, *MONTHS).grid(
+            column=1, row=3
+        )
+
+        self._entry_date = tk.Entry(self._frame)
+        self._entry_date.insert(tk.END, str(datetime.now().day))
+        self._entry_date.grid(column=1, row=4)
+
+        self._entry_amount = tk.Entry(self._frame)
+        self._entry_amount.grid(column=1, row=5)
+
+        self._entry_note = tk.Entry(self._frame)
+        self._entry_note.grid(column=1, row=6)
+
+        tk.Button(self._frame, 
+            text="Add a new record", bg='green', command=self._add_record
+        ).grid(column=1, row=7)
+
+        self.quitButton = tk.Button(
+            self._frame, text="Cancel", width=15, bg='red', command=self.close_window
+        ).grid(column=0, row=8)
+    
     def _add_record(self):
         try:
             self._validate_inputs()
@@ -242,6 +247,9 @@ class MainPage(tk.Frame):
 
         if self._entry_amount.get() == "":
             raise Exception("Please, insert an amount!")
+
+    def close_window(self):
+        self._master.destroy()
 
 
 class Gui(tk.Tk):
