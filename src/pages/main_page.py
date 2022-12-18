@@ -1,14 +1,11 @@
 import tkinter as tk
+from datetime import datetime
 
 from backend import Backend
 from database import Database
-
 from entities.categories import CATEGORIES
-from entities.months import MONTHS
-
-from datetime import datetime
-
 from windows.record_form import RecordForm
+
 
 class MainPage(tk.Frame):
     def __init__(self, parent, controller):
