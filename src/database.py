@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 from entities.categories import CATEGORIES
@@ -6,7 +7,9 @@ from entities.record_type import RecordType
 
 
 class Database:
-    _DATABASE_NAME = "records.db"
+    _DATABASE_NAME = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "records.db"
+    )
     _db: sqlite3.Connection
 
     def __init__(self, database_path=None) -> None:
