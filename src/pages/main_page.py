@@ -107,18 +107,18 @@ class MainPage(tk.Frame):
 
     def _show_record_form(self):
         newWindow = tk.Toplevel(self.master)
-        img = tk.PhotoImage(file="wallet.png")
+        img = tk.PhotoImage(file=self._controller.icon)
         self._controller.call("wm", "iconphoto", newWindow._w, img)
         AddRecord(newWindow)
 
     def _show_history(self):
         newWindow = tk.Toplevel(self.master)
-        img = tk.PhotoImage(file="wallet.png")
+        img = tk.PhotoImage(file=self._controller.icon)
         self._controller.call("wm", "iconphoto", newWindow._w, img)
         History(newWindow, self)
 
     def _show_edit_form(self, record_id: int):
         newWindow = tk.Toplevel(self.master)
-        img = tk.PhotoImage(file="wallet.png")
+        img = tk.PhotoImage(file=self._controller.icon)
         self._controller.call("wm", "iconphoto", newWindow._w, img)
         EditRecord(newWindow, record_id)

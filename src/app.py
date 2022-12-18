@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 
 from pages.login_page import LoginPage
@@ -8,7 +9,10 @@ class App(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         self.title("My awesome budget app")
-        img = tk.PhotoImage(file="wallet.png")
+        self.icon = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "wallet.png"
+        )
+        img = tk.PhotoImage(file=self.icon)
         self.tk.call("wm", "iconphoto", self._w, img)
 
         container = tk.Frame(self)
