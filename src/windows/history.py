@@ -3,6 +3,7 @@ from tkinter import ttk
 
 from database import Database
 from entities.record_type import RecordType
+from entities.categories import CATEGORIES
 
 
 class History:
@@ -45,7 +46,7 @@ class History:
             tk.Label(self._expenses_tab, text=f"{record[0]}").grid(
                 column=0, row=row_i
             )
-            tk.Label(self._expenses_tab, text=f"{record[2]}").grid(
+            tk.Label(self._expenses_tab, text=f"{CATEGORIES[int(record[2]) - 1]}").grid(
                 column=2, row=row_i
             )
             tk.Label(self._expenses_tab, text=f"{record[3]}").grid(
