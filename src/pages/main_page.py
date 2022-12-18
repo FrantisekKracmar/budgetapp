@@ -99,9 +99,9 @@ class MainPage(tk.Frame):
         return all_categories
 
     def _incomes_sum(self):
-        current_month = datetime.now().month - 1
+        current_month_index = datetime.now().month - 1
         all_months = self._db.get_sums_incomes(datetime.now().year)
-        current_month_sum = all_months[current_month]
+        current_month_sum = all_months[current_month_index]
 
         return current_month_sum
 
